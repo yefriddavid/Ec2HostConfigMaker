@@ -1,0 +1,14 @@
+mode: override ## append or override
+identity-file-location: /path/to/pem/files
+target-path-file: /home/user/.ssh/config
+aws-profile: myCustomProfile
+aws-region: us-east-1
+template: |+
+  Host myCustomHosts*
+    Port 22
+    User ec2-user
+
+  Host otherCustomHost*
+    Port 1520
+    User username
+
