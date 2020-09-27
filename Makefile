@@ -5,8 +5,8 @@ Version := $(shell git describe --abbrev=0 --tags | head -1) ##$(shell date "+%Y
 ReleaseDate := $(shell date "+%Y/%m/%d-%H:%M")
 GitCommit := $(shell git rev-parse HEAD)
 GitShortCommit := $(shell git rev-parse --short HEAD)
-SysConfigFile := $(SYS_CONFIG_FILE)
-DevConfigFile := $(DEV_CONFIG_FILE)
+SysConfigFile := $(SYS_DEFAULT_TARGET_CONFIG_FILE)
+DevConfigFile := $(DEV_SOURCE_CONFIG_FILE)
 
 
 LDFLAGS := "-s -w -X main.SysConfigFile=$(SysConfigFile) -X main.Version=$(Version) -X main.GitCommit=$(GitCommit) -X main.Author=$(Author) -X main.GitShortCommit=$(GitShortCommit) -X main.ReleaseDate='$(ReleaseDate)'"
