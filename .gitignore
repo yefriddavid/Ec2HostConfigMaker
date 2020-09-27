@@ -1,4 +1,4 @@
 .editorconfig
 config.yml
-Makefile
+.env
 vendor
