@@ -18,10 +18,14 @@ run:
 run: ## run dev local
 	@go run -ldflags $(LDFLAGS) cmd/main.go --configFile=$(DevConfigFile)
 
-local-publish: copy-local-config
-local-publish:
+build:
+build:
 	@go build -ldflags $(LDFLAGS) cmd/main.go
+
+local-publish: build copy-local-config
+local-publish:
 	sudo mv main /usr/local/bin/refreshSshConfigHosts
+#@go build -ldflags $(LDFLAGS) cmd/main.go
 
 copy-local-config:
 copy-local-config:
