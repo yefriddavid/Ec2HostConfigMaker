@@ -2,3 +2,5 @@
 config.yml
 .env
 vendor
+main
+refreshSshConfigHosts
