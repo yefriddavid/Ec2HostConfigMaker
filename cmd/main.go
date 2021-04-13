@@ -79,11 +79,11 @@ func main() {
 	flag.Parse()
 	config, _,_ := loadSetting()
 
-  if true {
-    fmt.Println("aca")
+  //if true {
+    //fmt.Println("aca")
     //fmt.Println(v)
     //return
-  }
+  //}
 
 	sess, err := session.NewSessionWithOptions(session.Options{
 		Config: aws.Config{
