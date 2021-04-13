@@ -18,14 +18,22 @@ run:
 run: ## run dev local
 	@go run -ldflags $(LDFLAGS) cmd/main.go --configFile=$(DevConfigFile)
 
+freeze:
+freeze:
+	git add .
+	git commit -m "freeze"
+	git tag -D 0.0.1
+	git tag 0.0.1
+
 release:
 release:
-	goreleaser --skip-validate --skip-publish
+	goreleaser --skip-validate --skip-publish --rm-dist
 #@go build -ldflags $(LDFLAGS) cmd/main.go
 
-local-publish: build copy-local-config
+local-publish: release copy-local-config
 local-publish:
-	sudo mv main /usr/local/bin/refreshSshConfigHosts
+	sudo mv ./dist/Ec2SshConfigHostMaker_linux_amd64/Ec2SshConfigHostMaker /usr/local/bin/refreshSshConfigHosts
+#sudo mv main /usr/local/bin/refreshSshConfigHosts
 #@go build -ldflags $(LDFLAGS) cmd/main.go
 
 copy-local-config:

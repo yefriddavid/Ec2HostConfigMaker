@@ -24,6 +24,7 @@ var SysConfigFile = ""
 
 var (
 	configFile = flag.String("configFile", "", "Path Configuration file")
+	showPathConfigFile = flag.Bool("path", false, "Show configuration path file")
 )
 
 type Config struct {
@@ -76,7 +77,12 @@ func init() {
 func main() {
 
 	flag.Parse()
-	config, _ := loadSetting()
+	config, v,_ := loadSetting()
+
+  if true {
+    fmt.Println("aca")
+    fmt.Println(v)
+  }
 
 	sess, err := session.NewSessionWithOptions(session.Options{
 		Config: aws.Config{
@@ -149,9 +155,9 @@ func check(e error) {
 	}
 }
 
-func loadSetting() (config Config, err error) {
+func loadSetting() (config Config, v *viper.Viper, err error) {
 
-	v := viper.New()
+	v = viper.New()
 	if *configFile == "" {
 		v.AddConfigPath("./")
 	} else {
