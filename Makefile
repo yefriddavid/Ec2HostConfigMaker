@@ -22,7 +22,7 @@ freeze:
 freeze:
 	git add .
 	git commit -m "freeze"
-	git tag -D 0.0.1
+	git tag -d 0.0.1
 	git tag 0.0.1
 
 release:
