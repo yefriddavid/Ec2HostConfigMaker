@@ -18,9 +18,10 @@ run:
 run: ## run dev local
 	@go run -ldflags $(LDFLAGS) cmd/main.go --configFile=$(DevConfigFile)
 
-transpileApp:
-transpileApp:
-	@go build -ldflags $(LDFLAGS) cmd/main.go
+release:
+release:
+	goreleaser --skip-validate --skip-publish
+#@go build -ldflags $(LDFLAGS) cmd/main.go
 
 local-publish: build copy-local-config
 local-publish:
