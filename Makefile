@@ -18,8 +18,8 @@ run:
 run: ## run dev local
 	@go run -ldflags $(LDFLAGS) cmd/main.go --configFile=$(DevConfigFile)
 
-build:
-build:
+transpileApp:
+transpileApp:
 	@go build -ldflags $(LDFLAGS) cmd/main.go
 
 local-publish: build copy-local-config
@@ -29,7 +29,7 @@ local-publish:
 
 copy-local-config:
 copy-local-config:
-	cp ./config.yml $(SysConfigFile)
+	cp ./configs/config.yml $(SysConfigFile)
 
 use:
 use:
