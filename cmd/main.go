@@ -81,7 +81,8 @@ func main() {
 
   if true {
     fmt.Println("aca")
-    fmt.Println(v)
+    //fmt.Println(v)
+    return
   }
 
 	sess, err := session.NewSessionWithOptions(session.Options{
