@@ -77,7 +77,7 @@ func init() {
 func main() {
 
 	flag.Parse()
-	config, v,_ := loadSetting()
+	config, _,_ := loadSetting()
 
   if true {
     fmt.Println("aca")
