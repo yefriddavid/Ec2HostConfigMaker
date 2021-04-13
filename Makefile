@@ -35,9 +35,9 @@ local-release: release copy-local-config
 local-release:
 	@echo "Success"
 
-local-publish:
-local-publish:
-	sudo mv ./dist/Ec2SshConfigHostMaker_linux_amd64/Ec2SshConfigHostMaker /usr/local/bin/refreshSshConfigHosts
+copy-local-app:
+copy-local-app:
+	sudo cp ./dist/Ec2SshConfigHostMaker_linux_amd64/Ec2SshConfigHostMaker /usr/local/bin/refreshSshConfigHosts
 #sudo mv main /usr/local/bin/refreshSshConfigHosts
 #@go build -ldflags $(LDFLAGS) cmd/main.go
 
