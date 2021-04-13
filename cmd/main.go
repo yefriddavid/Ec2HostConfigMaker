@@ -65,7 +65,7 @@ func init() {
 	// 	//os.Exit(2)
 	// }
 	//if !fileExists("/etc/Ec2HostMakerConfig.yml") {
-	if !fileExists("/etc/ConfigRefreshEc2HostMaker.yml") {
+	if !fileExists(*configFile) {
 		*configFile = "/etc/ConfigRefreshEc2HostMaker.yml"
 	} else {
 		fmt.Println("File not exist")
