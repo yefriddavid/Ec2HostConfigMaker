@@ -28,12 +28,13 @@ var (
 )
 
 type Config struct {
-	Mode                 string
-	AwsProfile           string `mapstructure:"aws-profile"`
-	AwsRegion            string `mapstructure:"aws-region"`
-	IdentityFileLocation string `mapstructure:"identity-file-location"`
-	TargetPathFile       string `mapstructure:"target-path-file"`
-	Template             string
+	Mode                  string
+	HostPrefix            string `mapstructure:"host-prefix"`
+	AwsProfile            string `mapstructure:"aws-profile"`
+	AwsRegion             string `mapstructure:"aws-region"`
+	IdentityFileLocation  string `mapstructure:"identity-file-location"`
+	TargetPathFile        string `mapstructure:"target-path-file"`
+	Template              string
 }
 
 func fileExists(filename string) bool {
@@ -127,7 +128,7 @@ func main() {
 				check(err)
 				hostIdentifierName := instanceKeyName + "-" + availabilityZone[2]
 				f.WriteString("Host " + hostIdentifierName + "\n")
-				f.WriteString("\tHostname " + *instance.PublicDnsName + "\n")
+				f.WriteString("\tHostname " + config.HostPrefix + *instance.PublicDnsName + "\n")
 				f.WriteString("\tIdentityFile " + config.IdentityFileLocation + "/" + *instance.KeyName + ".pem\n")
 				f.WriteString("\n")
 			}
