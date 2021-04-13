@@ -127,8 +127,8 @@ func main() {
 
 				check(err)
 				hostIdentifierName := instanceKeyName + "-" + availabilityZone[2]
-				f.WriteString("Host " + hostIdentifierName + "\n")
-				f.WriteString("\tHostname " + config.HostPrefix + *instance.PublicDnsName + "\n")
+				f.WriteString("Host " + config.HostPrefix + hostIdentifierName + "\n")
+				f.WriteString("\tHostname " + *instance.PublicDnsName + "\n")
 				f.WriteString("\tIdentityFile " + config.IdentityFileLocation + "/" + *instance.KeyName + ".pem\n")
 				f.WriteString("\n")
 			}
