@@ -30,7 +30,12 @@ release:
 	goreleaser --skip-validate --skip-publish --rm-dist
 #@go build -ldflags $(LDFLAGS) cmd/main.go
 
-local-publish: release copy-local-config
+
+local-release: release copy-local-config
+local-release:
+	@echo "Success"
+
+local-publish:
 local-publish:
 	sudo mv ./dist/Ec2SshConfigHostMaker_linux_amd64/Ec2SshConfigHostMaker /usr/local/bin/refreshSshConfigHosts
 #sudo mv main /usr/local/bin/refreshSshConfigHosts
@@ -38,7 +43,7 @@ local-publish:
 
 copy-local-config:
 copy-local-config:
-	cp ./configs/config.yml $(SysConfigFile)
+	sudo cp ./configs/config.yml $(SysConfigFile)
 
 use:
 use:
