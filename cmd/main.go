@@ -14,10 +14,12 @@ import (
 	"strings"
 )
 
-var Version = ""
+var Version = "No Provided"
+var GitCommit = "No Provided"
+var GitShortCommit = "No Provided"
+var Date = "No Provided"
 var VersionStr = ""
-var GitCommit = ""
-var GitShortCommit = ""
+
 var Author = ""
 var Homepage = ""
 var ReleaseDate = ""
@@ -26,6 +28,7 @@ var SysConfigFile = ""
 var (
 	configFile = flag.String("configFile", "", "Path Configuration file")
 	showPathConfigFile = flag.Bool("path", false, "Show configuration path file")
+	showVersion = flag.Bool("version", false, "Show version")
 )
 
 type Config struct {
@@ -79,6 +82,13 @@ func init() {
 func main() {
 
 	flag.Parse()
+
+  if *showVersion == true {
+
+    fmt.Println(Version)
+    return
+  }
+
 	config, _,_ := loadSetting()
 
   //if true {
