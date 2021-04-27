@@ -119,14 +119,17 @@ func main() {
 
 	defer f.Close()
 	for _, awsInstanceReservations := range awsInstances.Reservations {
+    var indexMachine int = 0
 		for _, instance := range awsInstanceReservations.Instances {
+      indexMachine++
 			instanceKeyName = GetArrayKeyValue(instance.Tags, "Name")
 			availabilityZone := strings.Split(*instance.Placement.AvailabilityZone, "-")
 
 			if *instance.PublicDnsName != "" {
 
 				check(err)
-				hostIdentifierName := instanceKeyName + "-" + availabilityZone[2]
+				//hostIdentifierName := instanceKeyName + "-" + availabilityZone[2]
+				hostIdentifierName := instanceKeyName + "-" + indexMachine
 				f.WriteString("Host " + config.HostPrefix + hostIdentifierName + "\n")
 				f.WriteString("\tHostname " + *instance.PublicDnsName + "\n")
 				f.WriteString("\tIdentityFile " + config.IdentityFileLocation + "/" + *instance.KeyName + ".pem\n")

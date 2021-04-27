@@ -37,7 +37,12 @@ local-release:
 
 copy-local-app:
 copy-local-app:
-	sudo cp ./dist/Ec2SshConfigHostMaker_linux_amd64/Ec2SshConfigHostMaker /usr/local/bin/refreshSshConfigHosts
+	sudo rm -rf /usr/local/bin/refreshSshConfigHosts
+	sudo ln -s $(shell pwd)/dist/Ec2SshConfigHostMaker_linux_amd64/Ec2SshConfigHostMaker /usr/local/bin/refreshSshConfigHosts
+
+
+
+#sudo cp ./dist/Ec2SshConfigHostMaker_linux_amd64/Ec2SshConfigHostMaker /usr/local/bin/refreshSshConfigHosts
 #sudo mv main /usr/local/bin/refreshSshConfigHosts
 #@go build -ldflags $(LDFLAGS) cmd/main.go
 
@@ -54,3 +59,7 @@ show:
 show:
 	@echo $(SysConfigFile)
 	@echo $(DevConfigFile)
+
+
+#sudo ln -s $(pwd)/fuego /usr/bin/fuego
+
