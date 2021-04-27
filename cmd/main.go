@@ -119,8 +119,8 @@ func main() {
 	f.WriteString(config.Template)
 
 	defer f.Close()
-	for _, awsInstanceReservations := range awsInstances.Reservations {
     var indexMachine int = 0
+	for _, awsInstanceReservations := range awsInstances.Reservations {
 		for _, instance := range awsInstanceReservations.Instances {
       indexMachine++
 			instanceKeyName = GetArrayKeyValue(instance.Tags, "Name")
