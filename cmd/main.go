@@ -121,8 +121,8 @@ func main() {
 	defer f.Close()
     var indexMachine int = 0
 	for _, awsInstanceReservations := range awsInstances.Reservations {
-		for _, instance := range awsInstanceReservations.Instances {
       indexMachine++
+		for _, instance := range awsInstanceReservations.Instances {
 			instanceKeyName = GetArrayKeyValue(instance.Tags, "Name")
 			//availabilityZone := strings.Split(*instance.Placement.AvailabilityZone, "-")
 
