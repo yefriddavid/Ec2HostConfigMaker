@@ -16,7 +16,8 @@ help:
 
 run:
 run: ## run dev local
-	@go run -ldflags $(LDFLAGS) cmd/main.go --configFile=$(DevConfigFile)
+	go run -ldflags $(LDFLAGS) cmd/main.go --configFile=$(shell pwd)configs/config.yml
+#@go run -ldflags $(LDFLAGS) cmd/main.go --configFile=$(DevConfigFile)
 
 freeze:
 freeze:
@@ -49,7 +50,9 @@ copy-local-app:
 copy-local-config:
 copy-local-config:
 	sudo rm -rf $(SysConfigFile)
+	sudo rm -rf /etc/ConfigRefreshEc2HostMakerLabs.yml
 	sudo ln -s $(shell pwd)/configs/config.yml $(SysConfigFile)
+	sudo ln -s $(shell pwd)/configs/config-labs.yml /etc/ConfigRefreshEc2HostMakerLabs.yml
 
 #sudo cp ./configs/config-labs.yml /etc/ConfigRefreshEc2HostMakerLabs.yml
 
@@ -65,4 +68,9 @@ show:
 
 
 #sudo ln -s $(pwd)/fuego /usr/bin/fuego
+
+UploadS3Bin:
+UploadS3Bin:
+	aws s3 cp ./dist s3://$(BUCKET_NAME)$(REMOTE_PREFIX)/SshEc2HostMaker --recursive --profile traze
+
 

@@ -23,10 +23,10 @@ var VersionStr = ""
 var Author = ""
 var Homepage = ""
 var ReleaseDate = ""
-var SysConfigFile = ""
+// var SysConfigFile = ""
 
 var (
-	configFile = flag.String("configFile", "", "Path Configuration file")
+	configFile = flag.String("configFile", "/etc/ConfigRefreshEc2HostMaker.yml", "Path Configuration file")
 	showPathConfigFile = flag.Bool("path", false, "Show configuration path file")
 	showVersion = flag.Bool("version", false, "Show version")
 )
@@ -54,9 +54,9 @@ func init() {
 
 	flag.Parse()
 
-	if *configFile == "" && SysConfigFile != "" {
+	/*if *configFile == "" && SysConfigFile != "" {
 		*configFile = SysConfigFile
-	}
+	}*/
 
 	if fileExists(*configFile) {
 		// fmt.Println("File exist")
@@ -85,7 +85,10 @@ func main() {
 
   if *showVersion == true {
 
-    fmt.Println(Version)
+    fmt.Println("Commit", GitCommit)
+    fmt.Println("Version", Version)
+    fmt.Println("Date", Date)
+    fmt.Println("Author", Author)
     return
   }
 
@@ -124,32 +127,40 @@ func main() {
 		return
 	}
 
-	var instanceKeyName string
 	f, err := os.Create(config.TargetPathFile)
 	f.WriteString(config.Template)
 
 	defer f.Close()
-    var indexMachine int = 0
+
+	var instanceName string
+  var indexMachine int = 0
 	for _, awsInstanceReservations := range awsInstances.Reservations {
-      indexMachine++
 		for _, instance := range awsInstanceReservations.Instances {
-			instanceKeyName = GetArrayKeyValue(instance.Tags, "Name")
+      if instanceName == GetArrayKeyValue(instance.Tags, "Name") {
+        indexMachine++
+      } else {
+        indexMachine = 1
+      }
+      instanceName = GetArrayKeyValue(instance.Tags, "Name")
 			//availabilityZone := strings.Split(*instance.Placement.AvailabilityZone, "-")
 
 			if *instance.PublicDnsName != "" {
 
 				check(err)
 				//hostIdentifierName := instanceKeyName + "-" + availabilityZone[2]
-				hostIdentifierName := instanceKeyName + "-" + strconv.Itoa(indexMachine)
-				f.WriteString("Host " + config.HostPrefix + hostIdentifierName + "\n")
+				hostIdentifierName := instanceName + "-" + strconv.Itoa(indexMachine)
+        //fmt.Println(instanceName)
+        fmt.Println(hostIdentifierName)
+
+        f.WriteString("Host " + config.HostPrefix + hostIdentifierName + "\n")
 				f.WriteString("\tHostname " + *instance.PublicDnsName + "\n")
 				f.WriteString("\tIdentityFile " + config.IdentityFileLocation + "/" + *instance.KeyName + ".pem\n")
 				f.WriteString("\n")
+
 			}
 
 		}
 	}
-    indexMachine = 0
 }
 
 func GetArrayKeyValue(values []*ec2.Tag, keySearch string) string {
