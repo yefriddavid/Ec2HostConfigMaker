@@ -27,7 +27,7 @@ freeze:
 
 release:
 release:
-	goreleaser --skip-validate --skip-publish --rm-dist
+	DATE=$(ReleaseDate) AUTHOR=$(Author)  goreleaser --skip-validate --skip-publish --rm-dist
 #@go build -ldflags $(LDFLAGS) cmd/main.go
 
 
