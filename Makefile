@@ -48,8 +48,11 @@ copy-local-app:
 
 copy-local-config:
 copy-local-config:
-	sudo cp ./configs/config.yml $(SysConfigFile)
-	sudo cp ./configs/config-labs.yml /etc/ConfigRefreshEc2HostMakerLabs.yml
+	sudo rm -rf $(SysConfigFile)
+	sudo ln -s $(shell pwd)/configs/config.yml $(SysConfigFile)
+
+#sudo cp ./configs/config-labs.yml /etc/ConfigRefreshEc2HostMakerLabs.yml
+
 
 use:
 use:

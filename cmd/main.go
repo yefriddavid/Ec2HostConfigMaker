@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import (
+  "strconv"
 	"flag"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -123,13 +124,13 @@ func main() {
 		for _, instance := range awsInstanceReservations.Instances {
       indexMachine++
 			instanceKeyName = GetArrayKeyValue(instance.Tags, "Name")
-			availabilityZone := strings.Split(*instance.Placement.AvailabilityZone, "-")
+			//availabilityZone := strings.Split(*instance.Placement.AvailabilityZone, "-")
 
 			if *instance.PublicDnsName != "" {
 
 				check(err)
 				//hostIdentifierName := instanceKeyName + "-" + availabilityZone[2]
-				hostIdentifierName := instanceKeyName + "-" + indexMachine
+				hostIdentifierName := instanceKeyName + "-" + strconv.Itoa(indexMachine)
 				f.WriteString("Host " + config.HostPrefix + hostIdentifierName + "\n")
 				f.WriteString("\tHostname " + *instance.PublicDnsName + "\n")
 				f.WriteString("\tIdentityFile " + config.IdentityFileLocation + "/" + *instance.KeyName + ".pem\n")
