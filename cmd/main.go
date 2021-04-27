@@ -139,6 +139,7 @@ func main() {
 
 		}
 	}
+    indexMachine = 0
 }
 
 func GetArrayKeyValue(values []*ec2.Tag, keySearch string) string {
