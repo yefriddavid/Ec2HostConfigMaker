@@ -71,6 +71,6 @@ show:
 
 UploadS3Bin:
 UploadS3Bin:
-	aws s3 cp ./dist s3://$(BUCKET_NAME)$(REMOTE_PREFIX)/SshEc2HostMaker --recursive --profile traze
+	@aws s3 cp ./dist s3://$(BUCKET_NAME)$(REMOTE_PREFIX)/SshEc2HostMaker --recursive --profile traze
 
 
