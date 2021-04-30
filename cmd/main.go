@@ -169,7 +169,8 @@ func (config Config) makeTmuxSessions(awsInstances *ec2.DescribeInstancesOutput)
 					if *instance.PublicDnsName != "" {
 						hostIdentifierName := instanceName + "-" + strconv.Itoa(indexMachine)
 						f.WriteString("      - shell_command:\n")
-						f.WriteString("          - autossh " + hostIdentifierName + "\n")
+						f.WriteString("          - ssh " + hostIdentifierName + "\n")
+            //f.WriteString("          - autossh " + hostIdentifierName + "\n")
 						f.WriteString("          - sudo tail -f /var/log/web.stdout.log\n")
 					}
 				}
