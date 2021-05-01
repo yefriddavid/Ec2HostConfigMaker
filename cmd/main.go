@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/spf13/viper"
+	structs "github.com/yefriddavid/Ec2HostConfigMaker/src/structs"
 	"os"
 	"path"
 	"strconv"
@@ -32,11 +33,13 @@ var (
 	showVersion        = flag.Bool("version", false, "Show version")
 )
 
+
 type TmuxSessionsConfig struct {
-	TargetPathFile string `mapstructure:"target-path-file"`
-	InstanceName   string `mapstructure:"instance-name"`
-	Template       string
-	HostPrefix     string `mapstructure:"host-prefix"`
+	TargetPathFile  string `mapstructure:"target-path-file"`
+	InstanceName    string `mapstructure:"instance-name"`
+	PaneOptions     string `mapstructure:"pane-options"`
+	Template        string
+	HostPrefix      string `mapstructure:"host-prefix"`
 }
 
 type SshConfig struct {
@@ -122,10 +125,11 @@ func apply(config Config) {
 	})
 
 	svc := ec2.New(sess)
-	instances := getInstances(svc)
+	instances := getInstancesV2(svc)
+  fmt.Println(instances)
 
-	config.makeConfig(instances)
-	config.makeTmuxSessions(instances)
+	//config.makeConfig(instances)
+	//config.makeTmuxSessions(instances)
 
 }
 
@@ -149,6 +153,44 @@ func getInstances(svc *ec2.EC2) *ec2.DescribeInstancesOutput {
 	}
 
 	return awsInstances
+}
+
+func getInstancesV2(svc *ec2.EC2) []Host {
+	input := &ec2.DescribeInstancesInput{}
+
+	awsInstances, err := svc.DescribeInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			fmt.Println(err.Error())
+		}
+		return nil
+	}
+
+  var currentInstance string
+  var indexMachine int
+  var hosts []structs.Host
+  for _, awsInstanceReservations := range awsInstances.Reservations {
+    for _, instance := range awsInstanceReservations.Instances {
+        if currentInstance == GetArrayKeyValue(instance.Tags, "Name") {
+          indexMachine++
+        } else {
+          indexMachine = 1
+        }
+        currentInstance = GetArrayKeyValue(instance.Tags, "Name")
+        if *instance.PublicDnsName != "" {
+          hostIdentifierName := currentInstance + "-" + strconv.Itoa(indexMachine)
+          hosts = append(hosts, Host{currentInstance, hostIdentifierName, *instance.PublicDnsName})
+
+        }
+    }
+  }
+
+	return hosts
 }
 func (config Config) makeTmuxSessions(awsInstances *ec2.DescribeInstancesOutput) {
 
