@@ -33,7 +33,6 @@ func MakeTmuxpSessionsFile(instances []structs.Host, configs []structs.TmuxpSess
 
 	workspaces := map[string]WorkspaceItem{}
 	for _, config := range configs {
-
 		workspaceItem := WorkspaceItem{SessionConfig: config}
 		for _, instance := range instances {
 			if instance.Name == config.InstanceName {
