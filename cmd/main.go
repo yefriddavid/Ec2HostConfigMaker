@@ -99,7 +99,7 @@ func apply(config structs.Config) {
 	})
 
 	svc := ec2.New(sess)
-	instances := getInstances(svc)
+	instances := getInstances(svc, config.SshConfig.HostPrefix)
 
 	plugins.MakeSshHostsConfig(instances, config.SshConfig)
 	plugins.MakeTmuxpSessionsFile(instances, config.TmuxpSessionConfigs)
@@ -108,7 +108,7 @@ func apply(config structs.Config) {
 
 }
 
-func getInstances(svc *ec2.EC2) []structs.Host {
+func getInstances(svc *ec2.EC2, hostPrefix string) []structs.Host {
 	input := &ec2.DescribeInstancesInput{}
 
 	awsInstances, err := svc.DescribeInstances(input)
@@ -137,7 +137,7 @@ func getInstances(svc *ec2.EC2) []structs.Host {
 			}
 			currentInstance = GetArrayKeyValue(instance.Tags, "Name")
 			if *instance.PublicDnsName != "" {
-				hostIdentifierName := currentInstance + "-" + strconv.Itoa(indexMachine)
+				hostIdentifierName := hostPrefix + currentInstance + "-" + strconv.Itoa(indexMachine)
 				hosts = append(hosts, structs.Host{currentInstance, hostIdentifierName, *instance.PublicDnsName, *instance.KeyName})
 
 			}

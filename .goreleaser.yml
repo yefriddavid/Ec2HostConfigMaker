@@ -16,6 +16,10 @@ builds:
       - linux
       #- windows
       #- darwin
+    goarch:
+      - amd64
+        #- arm
+        #- arm64
 archives:
   - replacements:
     #darwin: Darwin
@@ -28,7 +32,8 @@ archives:
     files:
       - configs/config.yml
       #- "README_{{ .Os }}.md"
-
+    #builds:
+    #- default
 
 checksum:
   name_template: 'checksums.txt'
