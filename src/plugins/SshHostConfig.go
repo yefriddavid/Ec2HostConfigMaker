@@ -20,7 +20,7 @@ func MakeSshHostsConfig(instances []structs.Host, sshConfig structs.SshConfig){
     //fmt.Println(instance.Identifier)
 		//f.WriteString("Host " + instance.Identifier + "\n")
 		f.WriteString("Host " + instance.Identifier + " " + instance.PrivateDnsName + "\n")
-		//f.WriteString("\tHostname " + instance.PublicDnsName + "\n")
+		f.WriteString("\tHostname " + instance.PublicDnsName + "\n")
 		f.WriteString("\tIdentityFile " + sshConfig.IdentityFileLocation + "/" + instance.KeyName + ".pem\n")
 		f.WriteString("\n")
   }
