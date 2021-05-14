@@ -138,7 +138,7 @@ func getInstances(svc *ec2.EC2, hostPrefix string) []structs.Host {
 			currentInstance = hostPrefix + GetArrayKeyValue(instance.Tags, "Name")
 			if *instance.PublicDnsName != "" {
 				hostIdentifierName := currentInstance + "-" + strconv.Itoa(indexMachine)
-				hosts = append(hosts, structs.Host{currentInstance, hostIdentifierName, *instance.PublicDnsName, *instance.KeyName})
+				hosts = append(hosts, structs.Host{currentInstance, hostIdentifierName, *instance.PublicDnsName, *instance.KeyName,*instance.PrivateDnsName})
 
 			}
 		}

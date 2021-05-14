@@ -21,6 +21,7 @@ type Host struct {
   Identifier string
   PublicDnsName string
   KeyName string
+  PrivateDnsName string
 }
 
 type Window struct {
