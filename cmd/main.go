@@ -33,6 +33,7 @@ var (
 	configFile         = flag.String("configFile", "/etc/ConfigRefreshEc2HostMaker.yml", "Path Configuration file")
 	showPathConfigFile = flag.Bool("path", false, "Show configuration path file")
 	showVersion        = flag.Bool("version", false, "Show version")
+	debug               = flag.Bool("debug", false, "debug mode")
 )
 
 func fileExists(filename string) bool {
@@ -129,6 +130,10 @@ func getInstances(svc *ec2.EC2, hostPrefix string) []structs.Host {
 	// var hosts []structs.Host
 	var hosts []structs.Host
 	for _, awsInstanceReservations := range awsInstances.Reservations {
+
+    if *debug == true {
+      fmt.Println("-------------------------------------------")
+    }
 		for _, instance := range awsInstanceReservations.Instances {
 			if currentInstance == GetArrayKeyValue(instance.Tags, "Name") {
 				indexMachine++
@@ -136,12 +141,27 @@ func getInstances(svc *ec2.EC2, hostPrefix string) []structs.Host {
 				indexMachine = 1
 			}
 			currentInstance = hostPrefix + GetArrayKeyValue(instance.Tags, "Name")
-			if *instance.PublicDnsName != "" {
+			if *instance.PublicDnsName != "" && instance.KeyName != nil {
 				hostIdentifierName := currentInstance + "-" + strconv.Itoa(indexMachine)
+
+        // currentInstance = strings.ReplaceAll(currentInstance, " ", "")
+        // hostIdentifierName = strings.ReplaceAll(hostIdentifierName, " ", "")
+        if *debug == true {
+          fmt.Println(currentInstance)
+          fmt.Println(hostIdentifierName)
+          fmt.Println(*instance.PublicDnsName)
+          fmt.Println("KeyName:", *instance.KeyName)
+          fmt.Println(*instance.PrivateDnsName)
+          fmt.Println(*instance.KeyName)
+        }
 				hosts = append(hosts, structs.Host{currentInstance, hostIdentifierName, *instance.PublicDnsName, *instance.KeyName,*instance.PrivateDnsName})
 
 			}
 		}
+
+    if *debug == true {
+      fmt.Println("-------------------------------------------")
+	  }
 	}
 
 	return hosts
