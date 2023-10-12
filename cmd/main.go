@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import (
+    "sort"
 	"flag"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -33,7 +34,7 @@ var (
 	configFile         = flag.String("configFile", "/etc/ConfigRefreshEc2HostMaker.yml", "Path Configuration file")
 	showPathConfigFile = flag.Bool("path", false, "Show configuration path file")
 	showVersion        = flag.Bool("version", false, "Show version")
-	debug               = flag.Bool("debug", false, "debug mode")
+	debug              = flag.Bool("debug", false, "debug mode")
 )
 
 func fileExists(filename string) bool {
@@ -126,47 +127,78 @@ func getInstances(svc *ec2.EC2, hostPrefix string) []structs.Host {
 	}
 
 	var currentInstance string
-	var indexMachine int
+	//var indexMachine int
 	// var hosts []structs.Host
 	var hosts []structs.Host
 	for _, awsInstanceReservations := range awsInstances.Reservations {
 
-    if *debug == true {
-      fmt.Println("-------------------------------------------")
-    }
+		if *debug == true {
+			fmt.Println("-------------------------------------------")
+		}
 		for _, instance := range awsInstanceReservations.Instances {
 			if currentInstance == GetArrayKeyValue(instance.Tags, "Name") {
-				indexMachine++
+				//indexMachine++
 			} else {
-				indexMachine = 1
+				//indexMachine = 1
 			}
 			currentInstance = hostPrefix + GetArrayKeyValue(instance.Tags, "Name")
 			if *instance.PublicDnsName != "" && instance.KeyName != nil {
-				hostIdentifierName := currentInstance + "-" + strconv.Itoa(indexMachine)
+				hostIdentifierName := "" // currentInstance + "-" + strconv.Itoa(indexMachine)
 
-        // currentInstance = strings.ReplaceAll(currentInstance, " ", "")
-        // hostIdentifierName = strings.ReplaceAll(hostIdentifierName, " ", "")
-        if *debug == true {
-          fmt.Println(currentInstance)
-          fmt.Println(hostIdentifierName)
-          fmt.Println(*instance.PublicDnsName)
-          fmt.Println("KeyName:", *instance.KeyName)
-          fmt.Println(*instance.PrivateDnsName)
-          fmt.Println(*instance.KeyName)
-        }
-				hosts = append(hosts, structs.Host{currentInstance, hostIdentifierName, *instance.PublicDnsName, *instance.KeyName,*instance.PrivateDnsName})
+				// currentInstance = strings.ReplaceAll(currentInstance, " ", "")
+				// hostIdentifierName = strings.ReplaceAll(hostIdentifierName, " ", "")
+				if *debug == true {
+			        fmt.Println("###########################################")
+                    fmt.Println("InstaceName:", currentInstance)
+                    fmt.Println("Identifier:", hostIdentifierName)
+                    fmt.Println("Dns Name:", *instance.PublicDnsName)
+                    fmt.Println("Private Dns:", *instance.PrivateDnsName)
+					fmt.Println("KeyName:", *instance.KeyName)
+			        fmt.Println("###########################################")
+                    //fmt.Println(*instance.KeyName)
+				}
+				hosts = append(hosts, structs.Host{currentInstance, hostIdentifierName, *instance.PublicDnsName, *instance.KeyName, *instance.PrivateDnsName})
 
 			}
 		}
 
-    if *debug == true {
-      fmt.Println("-------------------------------------------")
-	  }
+		if *debug == true {
+			fmt.Println("-------------------------------------------")
+		}
 	}
+
+    /*for _, host := range hosts {
+        fmt.Println(host.Name)
+    }*/
+    sort.Slice(hosts, func(i, j int) bool {
+        return hosts[i].Name < hosts[j].Name
+    })
+
+    currentInstanceName := "";
+    indexMachine := 1;
+    for index, host := range hosts {
+        if (currentInstanceName == host.Name){
+            indexMachine ++
+        } else {
+            indexMachine = 1
+        }
+
+        currentInstanceName = host.Name;
+        hostIdentifierName := currentInstanceName + "-" + strconv.Itoa(indexMachine)
+        host.Identifier = hostIdentifierName
+
+        hosts[index] = host
+    }
+    for _, host := range hosts {
+        fmt.Println(host.Name, host.Identifier)
+    }
+    if true {
+        //panic(0)
+    }
+
 
 	return hosts
 }
-
 
 func GetArrayKeyValue(values []*ec2.Tag, keySearch string) string {
 	for _, currentValue := range values {

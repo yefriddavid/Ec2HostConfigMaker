@@ -1,0 +1,29 @@
+version: 3
+
+dotenv: [.env]
+vars:
+  ReleaseDate:
+    sh: date "+%Y/%m/%d-%H:%M"
+
+  ## Pendiente por organizar
+tasks:
+  run:
+    cmds:
+      - go run cmd/main.go --debug
+
+  release:
+    cmds:
+      #- echo {{.ReleaseDate}} {{.Author}}
+      - DATE=$(ReleaseDate) AUTHOR=$(Author)  goreleaser --skip-validate --skip-publish --rm-dist
+
+
+  local-release:
+    cmds:
+      - sudo rm -rf {{.MY_INFINITY_HOME}}/.dave-programs/refreshSshConfigHosts
+      - sudo cp dist/Ec2HostConfigMaker_linux_amd64_v1/Ec2HostConfigMaker {{.MY_INFINITY_HOME}}/.dave-programs/refreshSshConfigHosts
+
+
+  publish:
+    cmds:
+      - aws s3 cp dist/Ec2HostConfigMaker_linux_amd64_v1/Ec2HostConfigMaker s3://{{.BUCKET_NAME}}/{{.REMOTE_PREFIX}}/SshEc2HostMaker/refreshSshConfigHosts-latest --profile traze
+
