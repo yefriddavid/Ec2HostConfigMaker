@@ -189,8 +189,10 @@ func getInstances(svc *ec2.EC2, hostPrefix string) []structs.Host {
 
         hosts[index] = host
     }
-    for _, host := range hosts {
-        fmt.Println(host.Name, host.Identifier)
+    if (*debug == true) {
+        for _, host := range hosts {
+            fmt.Println(host.Name, host.Identifier)
+        }
     }
     if true {
         //panic(0)

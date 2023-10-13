@@ -1,6 +1,10 @@
 version: 3
 
 dotenv: [.env]
+requisites:
+  # gvm use go1.20
+
+
 vars:
   ReleaseDate:
     sh: date "+%Y/%m/%d-%H:%M"
@@ -19,6 +23,7 @@ tasks:
 
   local-release:
     cmds:
+      - task: release
       - sudo rm -rf {{.MY_INFINITY_HOME}}/.dave-programs/refreshSshConfigHosts
       - sudo cp dist/Ec2HostConfigMaker_linux_amd64_v1/Ec2HostConfigMaker {{.MY_INFINITY_HOME}}/.dave-programs/refreshSshConfigHosts
 
